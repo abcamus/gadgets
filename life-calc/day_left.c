@@ -3,6 +3,8 @@
 #include <malloc.h>
 #include <stdlib.h>
 
+#define END_OF_AGE 80
+
 struct Cal_t {
 	int cur_year;
     int day_cnt;
@@ -45,7 +47,7 @@ void genCalendar(struct tm *p)
                 calendar[idx].day_cnt = 366-add_days(leap_year, 1+p->tm_mon);
             else
                 calendar[idx].day_cnt = 365-add_days(normal_year, 1+p->tm_mon);
-            calendar[idx].day_cnt += p->tm_mday;
+            calendar[idx].day_cnt -= p->tm_mday;
             calendar[idx].month_cnt = 12-(1+p->tm_mon);
         }
         else {
@@ -63,7 +65,6 @@ void genCalendar(struct tm *p)
 
 int calculateDay(int age)
 {
-#define END_OF_AGE 80
     int year_cnt = END_OF_AGE - age;
     int sum_days = 0, idx;
 
