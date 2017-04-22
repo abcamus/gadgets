@@ -1,4 +1,4 @@
-#-*-coding:utf8 -*-
+#-*-coding:utf-8 -*-
 
 
 __version__ = 0.1
@@ -19,7 +19,7 @@ class MainUI(Frame):
         #create main menu
         self.menubar = Menu(parent)
         # 'sl' is short for showline
-        self.attribute = {'font':'Monaco', 'bg':0x000000, 'sl':False}
+        self.attribute = {'font':'STFangsong', 'bg':0x000000, 'sl':False}
         self.fname = 'default.txt'
         # create file menu
         self.fmenu = Menu(self.menubar, tearoff = 0)
@@ -39,7 +39,7 @@ class MainUI(Frame):
         self.menubar.add_cascade(label = 'Help', menu = helpmenu)
         parent['menu'] = self.menubar
         # Text config
-        self.text = Text(font = self.attribute['font'])
+        self.text = Text(font = (self.attribute['font'], 18))
         self.text.pack(fill = BOTH, expand = YES)
     
     def save(self):
@@ -119,7 +119,7 @@ class Note():
     def __init__(self):
         self.tk = Tk()
         self.tk.title('宙斯的神殿')
-        #self.tk.iconbitmap('icons/48x48.ico')
+        self.tk.iconbitmap('icons/48x48.ico')
     
         #self.tk.geometry('1440x900')
         self.has_sub = False
