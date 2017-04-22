@@ -41,6 +41,7 @@ class MainUI(Frame):
         # Text config
         self.text = Text(font = self.attribute['font'])
         self.text.pack(fill = BOTH, expand = YES)
+        self.text.tag_config('bg', background='#a0a000')
     
     def save(self):
         txtContent = self.text.get(1.0, END)  
@@ -51,7 +52,11 @@ class MainUI(Frame):
         self.text.delete(1.0, END)
         for line in self.filecontent:
             if self.attribute['sl'] is False:
-                self.text.insert(self.linenum, str(int(self.linenum))+' '+line)
+                self.blankets = ''
+                for i in range(4-len(str(int(self.linenum)))):
+                    self.blankets += ' '
+                self.text.insert(self.linenum, str(int(self.linenum))+self.blankets, 'bg')
+                self.text.insert(INSERT, ' '+line)
             else:
                 self.text.insert(self.linenum, line)
             self.linenum += 1
