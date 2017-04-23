@@ -1,4 +1,4 @@
-#-*-coding:utf8 -*-
+#--coding:utf-8 --
 
 
 __version__ = 0.1
@@ -19,7 +19,7 @@ class MainUI(Frame):
         #create main menu
         self.menubar = Menu(parent)
         # 'sl' is short for showline
-        self.attribute = {'font':'Monaco', 'bg':0x000000, 'sl':False}
+        self.attribute = {'font':('STFangsong', 18), 'bg':0x000000, 'sl':False}
         self.fname = 'default.txt'
         # create file menu
         self.fmenu = Menu(self.menubar, tearoff = 0)
@@ -68,7 +68,7 @@ class MainUI(Frame):
         self.linenum = 1.0
         if self.filecontent is not None:
             for line in self.filecontent:
-                self.text.insert(self.linenum, line.decode('gb2312'))
+                self.text.insert(self.linenum, line.decode('utf8'))
                 self.linenum += 1
             
     '''
@@ -124,7 +124,7 @@ class Note():
     def __init__(self):
         self.tk = Tk()
         self.tk.title('宙斯的神殿')
-        #self.tk.iconbitmap('icons/48x48.ico')
+        self.tk.iconbitmap('icons/48x48.ico')
     
         #self.tk.geometry('1440x900')
         self.has_sub = False

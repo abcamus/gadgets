@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <time.h>
+#ifdef __APPLE__
+#include <sys/malloc.h>
+#else
 #include <malloc.h>
+#endif
 #include <stdlib.h>
 
 #define END_OF_AGE 80
