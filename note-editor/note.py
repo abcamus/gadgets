@@ -12,14 +12,20 @@ __author__ = {'name' : 'Albert Camus',
 from json.decoder import errmsg
 import sys, tkFileDialog, os
 from Tkinter import *
+import platform
 
 class MainUI(Frame):
     def __init__(self, parent):
         Frame.__init__(self, parent)
+        self.sysstr = platform.system()
         #create main menu
         self.menubar = Menu(parent)
         # 'sl' is short for showline
-        self.attribute = {'font':('STFangsong', 18), 'bg':0x000000, 'sl':False}
+        if self.sysstr == "Linux":
+            print "Linux System"
+            self.attribute = {'font':('Monaco', 13), 'bg':"#000000", 'fg':"#f92672", 'sl':False}
+        #elif self.sysstr == "":
+            #TODO: add system specific sttribute configuration
         self.fname = 'default.txt'
         # create file menu
         self.fmenu = Menu(self.menubar, tearoff = 0)
@@ -39,12 +45,30 @@ class MainUI(Frame):
         self.menubar.add_cascade(label = 'Help', menu = helpmenu)
         parent['menu'] = self.menubar
         # Text config
-        self.text = Text(font = self.attribute['font'])
-        self.text.pack(fill = BOTH, expand = YES)
+        self.text = Text(font = self.attribute['font'], width=480, height=320, bg=self.attribute['bg'], fg=self.attribute['fg'], insertwidth=1, insertbackground="#f0f0f0")
+        self.linbar = Label(font = self.attribute['font'], width=4)
+        '''
+        if self.attribute['sl']:
+            self.linbar.pack(side=LEFT, fill=Y, expand=YES)
+        else:
+            self.linbar.forget()
+        '''
+        #self.linbar.pack(side=LEFT, fill=Y)
+        self.text.pack(side=LEFT, fill=BOTH, expand=YES)
         self.text.tag_config('bg', background='#a0a000')
+
+        # bind keys
         self.text.bind("<Control-a>", self.sel_all)
-        self.text.bind("<Delete>", self.del_text)
+        self.text.bind("<Control-s>", self.save)
+        self.text.bind("<Control-q>", self.bd_exit)
         self.filecontent = None
+
+    '''
+    binding functions
+    '''
+    def bd_exit(self, event):
+        print "Exit"
+        self.exit()
 
     def sel_all(self, event):
         print event.keysym
@@ -53,37 +77,42 @@ class MainUI(Frame):
             self.selected = True
             self.text['bg'] = '#a0a0a0'
 
-    def del_text(self):
-        print "delete text"
-        if self.selected is True:
-            self.text.delete(1.0, END)
-
-    def save(self):
+    def save(self, event):
+        if self.fname == "default.txt":
+            self.fname = tkFileDialog.asksaveasfilename(initialdir = os.getcwd())
+            if self.fname == None:
+                self.fname = "default.txt"
+        print "Saving file to %s" %(self.fname)
         txtContent = self.text.get(1.0, END)  
         self.saveFile(content = txtContent) 
         
     def ShowLineNum(self):
         self.linenum = 1.0
         self.filecontent = self.text.get(1.0, END).split('\n')
-        if self.filecontent != None:
-            self.text.delete(1.0, END)
+        #if self.filecontent != None:
+            #self.text.delete(1.0, END)
         for line in self.filecontent:
             if self.attribute['sl'] is False:
+                self.linbar.pack(side = LEFT, fill = Y, expand = YES)
+                '''
                 self.strNum = str(int(self.linenum))
                 for i in range(4-len(str(int(self.linenum)))):
                     self.strNum = '0'+self.strNum 
                 self.text.insert(self.linenum, self.strNum, 'bg')
                 self.text.insert(INSERT, '  '+line+'\n')
+                '''
+                self.linbar["text"] += str(int(self.linenum))+'\n'
             else:
+                self.linbar.forget()
                 self.text.insert(self.linenum, line)
             self.linenum += 1
         self.attribute['sl'] = not self.attribute['sl']
     
     def open(self):
-        self.filename = tkFileDialog.askopenfilename(initialdir = os.getcwd())
+        self.fname = tkFileDialog.askopenfilename(initialdir = os.getcwd())
         if self.filecontent != None:
             self.text.delete(1.0, END)
-        self.filecontent = self.openFile(fname = self.filename)
+        self.filecontent = self.openFile(fname = self.fname)
         self.linenum = 1.0
         if self.filecontent is not None:
             for line in self.filecontent:
@@ -170,19 +199,21 @@ class Note():
             self.has_sub = False
         else:
             self.has_sub = True
-            self.MainText.SubText.pack(side = 'right', anchor = NW)
+            self.MainText.text.pack(side=LEFT, fill=BOTH)
+            self.MainText.SubText.pack(side=RIGHT, anchor=NW)
         
     def createUI(self):
         #create main menu
         self.MainText = MainUI(self.tk)
-        
+
         # special for sub window editor
+        '''
         self.MainText.SubText = Text(self.MainText.text, bg = 'green')
         self.MainText.menubar.add_command(label = 'subwin', command = self.CreateSubWin)
         self.submenubar = Menu(self.MainText.menubar)
         self.submenubar.add_command(label = 'open', command = self.SubOpen)
         self.tk.bind('<Button-3>', self.popup)
-
+        '''
 
 if __name__ == '__main__':  
     Note()
