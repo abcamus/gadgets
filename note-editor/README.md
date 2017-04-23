@@ -6,4 +6,5 @@
 ## BUG List
 
 2.1 Chinese input in OSX ?
-install the (activetcl)[https://www.activestate.com/activetcl/downloads]
+install the [activetcl](https://www.activestate.com/activetcl/downloads)
+note: if you have installed python by `brew install`, remove it

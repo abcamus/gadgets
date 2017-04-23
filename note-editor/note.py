@@ -1,4 +1,4 @@
-#-*-coding:utf-8 -*-
+#--coding:utf-8 --
 
 
 __version__ = 0.1
@@ -19,7 +19,7 @@ class MainUI(Frame):
         #create main menu
         self.menubar = Menu(parent)
         # 'sl' is short for showline
-        self.attribute = {'font':'STFangsong', 'bg':0x000000, 'sl':False}
+        self.attribute = {'font':('STFangsong', 18), 'bg':0x000000, 'sl':False}
         self.fname = 'default.txt'
         # create file menu
         self.fmenu = Menu(self.menubar, tearoff = 0)
@@ -39,7 +39,7 @@ class MainUI(Frame):
         self.menubar.add_cascade(label = 'Help', menu = helpmenu)
         parent['menu'] = self.menubar
         # Text config
-        self.text = Text(font = (self.attribute['font'], 18))
+        self.text = Text(font = self.attribute['font'])
         self.text.pack(fill = BOTH, expand = YES)
     
     def save(self):
@@ -63,7 +63,7 @@ class MainUI(Frame):
         self.linenum = 1.0
         if self.filecontent is not None:
             for line in self.filecontent:
-                self.text.insert(self.linenum, line.decode('gb2312'))
+                self.text.insert(self.linenum, line.decode('utf8'))
                 self.linenum += 1
             
     '''
