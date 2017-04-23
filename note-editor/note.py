@@ -42,8 +42,22 @@ class MainUI(Frame):
         self.text = Text(font = self.attribute['font'])
         self.text.pack(fill = BOTH, expand = YES)
         self.text.tag_config('bg', background='#a0a000')
+        self.text.bind("<Control-a>", self.sel_all)
+        self.text.bind("<Delete>", self.del_text)
         self.filecontent = None
-    
+
+    def sel_all(self, event):
+        print event.keysym
+        if self.filecontent != None:
+            #self.text.get(1.0, END)
+            self.selected = True
+            self.text['bg'] = '#a0a0a0'
+
+    def del_text(self):
+        print "delete text"
+        if self.selected is True:
+            self.text.delete(1.0, END)
+
     def save(self):
         txtContent = self.text.get(1.0, END)  
         self.saveFile(content = txtContent) 
@@ -57,9 +71,9 @@ class MainUI(Frame):
             if self.attribute['sl'] is False:
                 self.strNum = str(int(self.linenum))
                 for i in range(4-len(str(int(self.linenum)))):
-                    self.strNum = ' '+self.strNum 
+                    self.strNum = '0'+self.strNum 
                 self.text.insert(self.linenum, self.strNum, 'bg')
-                self.text.insert(INSERT, ' '+line+'\n')
+                self.text.insert(INSERT, '  '+line+'\n')
             else:
                 self.text.insert(self.linenum, line)
             self.linenum += 1
