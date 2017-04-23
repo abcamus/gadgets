@@ -13,6 +13,7 @@ from json.decoder import errmsg
 import sys, tkFileDialog, os
 from Tkinter import *
 import platform
+import timer
 
 class MainUI(Frame):
     def __init__(self, parent):
@@ -172,12 +173,19 @@ class Note():
     def __init__(self):
         self.tk = Tk()
         self.tk.title('宙斯的神殿')
+        self.tk.after(500, self.updateTime)
         #self.tk.iconbitmap('icons/48x48.ico')
     
         #self.tk.geometry('1440x900')
         self.has_sub = False
         self.createUI()
         self.tk.mainloop()
+
+    def updateTime(self):
+        import time
+        time.strftime("%H:%M:%S")
+        print "update time"
+        self.tk.after(500, self.updateTime)
     
     def popup(self, event):
         self.submenubar.post(event.x_root, event.y_root)
@@ -216,4 +224,5 @@ class Note():
         '''
 
 if __name__ == '__main__':  
+    #timer.start()
     Note()
