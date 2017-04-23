@@ -42,6 +42,7 @@ class MainUI(Frame):
         self.text = Text(font = self.attribute['font'])
         self.text.pack(fill = BOTH, expand = YES)
         self.text.tag_config('bg', background='#a0a000')
+        self.filecontent = None
     
     def save(self):
         txtContent = self.text.get(1.0, END)  
@@ -49,14 +50,16 @@ class MainUI(Frame):
         
     def ShowLineNum(self):
         self.linenum = 1.0
-        self.text.delete(1.0, END)
+        self.filecontent = self.text.get(1.0, END).split('\n')
+        if self.filecontent != None:
+            self.text.delete(1.0, END)
         for line in self.filecontent:
             if self.attribute['sl'] is False:
-                self.blankets = ''
+                self.strNum = str(int(self.linenum))
                 for i in range(4-len(str(int(self.linenum)))):
-                    self.blankets += ' '
-                self.text.insert(self.linenum, str(int(self.linenum))+self.blankets, 'bg')
-                self.text.insert(INSERT, ' '+line)
+                    self.strNum = ' '+self.strNum 
+                self.text.insert(self.linenum, self.strNum, 'bg')
+                self.text.insert(INSERT, ' '+line+'\n')
             else:
                 self.text.insert(self.linenum, line)
             self.linenum += 1
@@ -64,6 +67,8 @@ class MainUI(Frame):
     
     def open(self):
         self.filename = tkFileDialog.askopenfilename(initialdir = os.getcwd())
+        if self.filecontent != None:
+            self.text.delete(1.0, END)
         self.filecontent = self.openFile(fname = self.filename)
         self.linenum = 1.0
         if self.filecontent is not None:
@@ -124,7 +129,7 @@ class Note():
     def __init__(self):
         self.tk = Tk()
         self.tk.title('宙斯的神殿')
-        self.tk.iconbitmap('icons/48x48.ico')
+        #self.tk.iconbitmap('icons/48x48.ico')
     
         #self.tk.geometry('1440x900')
         self.has_sub = False
