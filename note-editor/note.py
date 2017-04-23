@@ -14,6 +14,7 @@ import sys, tkFileDialog, os
 from Tkinter import *
 import platform
 import timer
+import theme
 
 class MainUI(Frame):
     def __init__(self, parent):
@@ -24,7 +25,7 @@ class MainUI(Frame):
         # 'sl' is short for showline
         if self.sysstr == "Linux":
             print "Linux System"
-            self.attribute = {'font':('Monaco', 13), 'bg':"#000000", 'fg':"#f92672", 'sl':False}
+            self.attribute = {'font':('Monaco', 13), 'bg':"#1B1D1E", 'fg':"#F8F8F2", 'sl':False}
         #elif self.sysstr == "":
             #TODO: add system specific sttribute configuration
         self.fname = 'default.txt'
@@ -46,7 +47,7 @@ class MainUI(Frame):
         self.menubar.add_cascade(label = 'Help', menu = helpmenu)
         parent['menu'] = self.menubar
         # Text config
-        self.text = Text(font = self.attribute['font'], width=480, height=320, bg=self.attribute['bg'], fg=self.attribute['fg'], insertwidth=1, insertbackground="#f0f0f0")
+        self.text = Text(font = self.attribute['font'], width=480, height=320, bg=self.attribute['bg'], fg=self.attribute['fg'], insertwidth=1, insertbackground="#f0f0f0", tabs='1c')
         self.linbar = Label(font = self.attribute['font'], width=4)
         '''
         if self.attribute['sl']:
@@ -56,7 +57,7 @@ class MainUI(Frame):
         '''
         #self.linbar.pack(side=LEFT, fill=Y)
         self.text.pack(side=LEFT, fill=BOTH, expand=YES)
-        self.text.tag_config('bg', background='#a0a000')
+        theme.init(self.text)
 
         # bind keys
         self.text.bind("<Control-a>", self.sel_all)
@@ -81,7 +82,7 @@ class MainUI(Frame):
     def save(self, event):
         if self.fname == "default.txt":
             self.fname = tkFileDialog.asksaveasfilename(initialdir = os.getcwd())
-            if self.fname == None:
+            if not self.fname:
                 self.fname = "default.txt"
         print "Saving file to %s" %(self.fname)
         txtContent = self.text.get(1.0, END)  
@@ -174,17 +175,31 @@ class Note():
         self.tk = Tk()
         self.tk.title('宙斯的神殿')
         self.tk.after(500, self.updateTime)
+        self.cur_idx = 1.0
+        self.cur_pos = '1.0'
         #self.tk.iconbitmap('icons/48x48.ico')
     
         #self.tk.geometry('1440x900')
         self.has_sub = False
         self.createUI()
+        #text = self.MainText.text
+        #text.insert(INSERT, "hello", 'Number')
+        #text.insert(INSERT, "hello", 'String')
         self.tk.mainloop()
 
     def updateTime(self):
         import time
         time.strftime("%H:%M:%S")
-        print "update time"
+        #print "update time"
+        text = self.MainText.text
+        if text.edit_modified():
+            print "Text Modified"
+            #TODO: timer handler
+            self.insert = CURRENT
+            theme.parse(text, text.get(self.cur_pos, self.insert))
+            self.cur_pos = text.index(self.insert)
+            print "current pos = %s" %(self.cur_pos)
+            text.edit_modified(False)
         self.tk.after(500, self.updateTime)
     
     def popup(self, event):
@@ -197,7 +212,7 @@ class Note():
             self.MainText.SubText.delete(1.0, END)
             self.linenum = 1.0
             for eachline in self.filecontent:
-                self.MainText.SubText.insert(self.linenum, eachline.decode('gb2312'))
+                self.MainText.SubText.insert(self.linenum, eachline.decode('utf-8'))
                 self.linenum += 1
     
     def CreateSubWin(self):
