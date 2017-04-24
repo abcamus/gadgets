@@ -155,5 +155,3 @@ class MainUI(Frame):
                                command = lambda: self.destroy_ui(author_ui))
         about_string.pack()
         confirmButton.pack()
-
-

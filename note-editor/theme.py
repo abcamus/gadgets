@@ -23,12 +23,20 @@ def init(obj):
     obj.tag_config('Type', foreground='#66D9EF')
     obj.tag_config('Macro', foreground='#C4BE89')
 
-state = 'INIT'
-lexer_type = 'Charactor'
-word = ''
-
-import lexer
+from lexer import *
 
 def parse(text, string):
     if len(string) > 0:
-        print string
+        text.delete(1.0, 'end')
+        rsv_str = ''
+        while string[0] == ' ':
+            rsv_str += ' '
+            print len(string)
+            if len(string) > 1:
+                string = string[1:-1]
+            else:
+                string = ''
+        text.insert('insert', rsv_str)
+        (token, string) = get_token(string)
+        print token.content, string
+        text.insert('insert', token.content, token.type)
