@@ -10,14 +10,12 @@ class MainUI(Frame):
     def __init__(self, parent):
         Frame.__init__(self, parent)
         self.sysstr = platform.system()
-        #create main menu
         self.menubar = Menu(parent)
         self.attribute = {'font':('Monaco', 13), 'bg':"#1B1D1E", 'fg':"#F8F8F2", 'sl':False}
         if self.sysstr == "Linux":
             print "Linux System"
             self.attribute['font'] = ('Monaco', 13)
         elif self.sysstr == "Windows":
-            #TODO: add system specific sttribute configuration
             self.attribute['font'] = ('Simsun', 13)
         else:
             self.attribute['font'] = ('Monaco', 13)
@@ -55,6 +53,14 @@ class MainUI(Frame):
         self.text.bind("<Control-a>", self.sel_all)
         self.text.bind("<Control-s>", self.save)
         self.filecontent = None
+
+        # keep current position in text
+        self.line = 1
+        self.col = 0
+        self.cur_pos = '1.0'
+
+    def update_line_col(self):
+        self.cur_pos = str(self.line)+'.'+str(self.col)
 
     '''
     binding functions

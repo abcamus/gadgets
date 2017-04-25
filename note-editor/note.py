@@ -33,12 +33,18 @@ class Note():
 
     def updateTime(self):
         import lexer
-        text = self.MainText.text
+        main = self.MainText
+        text = main.text
         if text.edit_modified():
+            print text.index(INSERT)
+            text.edit_modified(False)
+        '''
             print "Text Modified"
             #TODO: timer handler
-            lexer.parse(text, text.get('1.0', INSERT))
-            text.edit_modified(False)
+            string = text.get(main.cur_pos, INSERT)
+            lexer.parse(main, string)
+            main.update_line_col()
+        '''
         self.tk.after(100, self.updateTime)
             
     def createUI(self):

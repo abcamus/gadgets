@@ -51,12 +51,14 @@ class Lexer():
 lexer = Lexer()
 
 from Tkinter import *
-def parse(text, string):
-    text.delete('1.0', END)
+def parse(main, string):
+    text = main.text
+    text.delete(main.cur_pos, INSERT)
+    main.col += len(string)
     for char in string: 
         lexer.update(char, 1, 0)
         if len(lexer.token_list) == lexer.token_num + 1:
             token = lexer.token_list[-1]
-            print token.type
+            print token.type, token.content
             text.insert('insert', token.content, token.type)
             lexer.token_num += 1
