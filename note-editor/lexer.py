@@ -1,41 +1,62 @@
-class token():
+
+class Token():
     def __init__(self):
         self.type = None
         self.content = ''
+        self.line = 0
+        self.col = 0
 
-class lexer():
-    def __init__(self, content):
-        self.cur_token = token()
-        self.string = content
-        self.cur_idx = 0
-        self.cur_ch = self.string[self.cur_idx]
+operation_list = ['+', '-', '*', '/']
+def isoperator(char):
+    if char in operation_list:
+        return True
+    else:
+        return False
 
-    def get_next_ch(self):
-        if self.cur_idx >= len(self.string)-1:
-            return None
-        else:
-            self.cur_idx += 1
-            self.cur_ch = self.string[self.cur_idx]
+class Lexer():
+    '''
+    state = 'PROCESS', 'DONE'
+    '''
+    def __init__(self):
+        self.token = Token()
+        self.token_list = []
+        self.token_num = 0
+        self.cur_line = 0
+        self.cur_col = 0
+
+    def update(self, char, line, col):
+        # parse a new token
+        if char.isdigit():
+            if self.token.type == None:
+                self.token.type = 'Number'
+            elif self.token.type == 'Number':
+                self.token.content += char
+            else:
+                token_list.append(self.token)
+                self.start_token(char) 
+        if isoperator(char):
+            self.token.type = 'Operator'
+            self.token.content = char
+            self.token_list.append(self.token)
+            self.new_token(line, col)
+        return self.token
+
+    def new_token(self, line, col):
+        self.token = Token()
+        self.token.type = None
+        self.token.content = ''
+        self.token.line = line
+        self.token.col = col
     
-    def eat(self, type):
-        if type == 'Number':
-            while self.cur_ch.isdigit():
-                self.cur_token.content += self.cur_ch
-                self.get_next_ch()
-        self.cur_token.type = type
+lexer = Lexer()
 
-    def skip_whitespace():
-        while cur_ch == ' ':
-            self.get_next_ch()
-
-    def get_next_token(self):
-        if self.cur_ch.isdigit():
-            self.eat('Number')
-        return (self.cur_token, self.string[self.cur_idx:-1])
-
-def get_token(content):
-    mylexer = lexer(content)
-    return mylexer.get_next_token()
-
+from Tkinter import *
 def parse(text, string):
-    print string
+    text.delete('1.0', END)
+    for char in string: 
+        lexer.update(char, 1, 0)
+        if len(lexer.token_list) == lexer.token_num + 1:
+            token = lexer.token_list[-1]
+            print token.type
+            text.insert('insert', token.content, token.type)
+            lexer.token_num += 1
