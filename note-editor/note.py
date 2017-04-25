@@ -32,11 +32,12 @@ class Note():
         self.tk.destroy()
 
     def updateTime(self):
+        import lexer
         text = self.MainText.text
         if text.edit_modified():
             print "Text Modified"
             #TODO: timer handler
-            theme.parse(text, text.get(1.0, END))
+            lexer.parse(text, text.get('1.0', INSERT))
             text.edit_modified(False)
         self.tk.after(100, self.updateTime)
             

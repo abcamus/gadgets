@@ -36,3 +36,6 @@ class lexer():
 def get_token(content):
     mylexer = lexer(content)
     return mylexer.get_next_token()
+
+def parse(text, string):
+    print string

@@ -46,9 +46,10 @@ class MainUI(Frame):
         # Text config
         self.text = Text(font = self.attribute['font'], bg=self.attribute['bg'], fg=self.attribute['fg'], insertwidth=1, insertbackground="#f0f0f0", tabs='1c')
         self.linbar = Label(font = self.attribute['font'], width=4)
-
         self.text.pack(side=LEFT, fill=BOTH, expand=YES)
         theme.init(self.text)
+        self.line = 1
+        self.column = 0
 
         # bind keys
         self.text.bind("<Control-a>", self.sel_all)
