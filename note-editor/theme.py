@@ -22,5 +22,6 @@ def init(obj):
     obj.tag_config('Operator', foreground='#F92672')
     obj.tag_config('Type', foreground='#66D9EF')
     obj.tag_config('Macro', foreground='#C4BE89')
+    obj.tag_config('WhiteSpace')
 
 
