@@ -38,11 +38,20 @@ class Lexer():
         self.token.e_col = self.cur_col
         self.token.end_pos = str(self.token.e_line)+'.'+str(self.token.e_col)
 
+    def step_back(self):
+        if self.cur_ch == '\n':
+            self.cur_line -= 1
+        else:
+            self.cur_col -= 1
+
     def skip_whitespace(self):
         while self.cur_ch == ' ':
             self.token.content += self.cur_ch
             self.get_next_char()
         self.token.type = 'WhiteSpace'
+        if self.cur_ch != None:
+            # move back the cur_pos
+            self.step_back()
         self.update_token()
         # found token
         print "token start = %s" %(str(self.token.s_line)+'.'+str(self.token.s_col))
@@ -88,13 +97,15 @@ class Lexer():
         self.cur_idx = 0
         self.cur_ch = string[self.cur_idx]
         self.cur_idx += 1
-        #self.update_pos()
+        self.update_pos()
 
         while self.cur_ch != None:
             if self.cur_ch == ' ':
                 self.skip_whitespace()
             elif self.cur_ch.isalpha():
                 self.eatID()
+            else:
+                self.get_next_char()
         print "Updated"
         
 lexer = Lexer()
