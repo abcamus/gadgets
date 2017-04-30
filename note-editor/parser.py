@@ -29,12 +29,10 @@ class Lexer():
         self.cur_line = 1
         self.cur_col = 0
         self.systype = platform.system()
+        self.NewLine = False
 
     def update_pos(self):
-        if self.cur_ch == '\n':
-            self.cur_line += 1
-        else:
-            self.cur_col += 1
+        self.cur_col += 1
 
     def get_next_char(self):
         if self.cur_idx+1 <= len(self.string)-1:
@@ -53,10 +51,7 @@ class Lexer():
         self.token.end_pos = str(self.token.e_line)+'.'+str(self.token.e_col)
 
     def step_back(self):
-        if self.cur_ch == '\n':
-            return (self.cur_line-1, self.cur_col)
-        else:
-            return (self.cur_line, self.cur_col-1)
+        return (self.cur_line, self.cur_col-1)
 
     def skip_whitespace(self):
         while self.cur_ch == ' ':
@@ -65,7 +60,6 @@ class Lexer():
         self.token.type = 'WhiteSpace'
         # move back the cur_pos
         self.update_token(True)
-        # found token
         self.token_list.append(self.token)
         self.new_token()
 
@@ -75,39 +69,56 @@ class Lexer():
             self.token.content += self.cur_ch
             self.get_next_char()
 
-        print "cur char = %s" %(self.cur_ch)
         self.update_token(True)
-        print "token pos = %s" %(self.token.end_pos)
         self.token_list.append(self.token)
         self.new_token()
+    
+    def eatChar(self):
+        self.token.type = 'Charactor'
+        
+        self.token.content += self.cur_ch
+        if self.cur_ch == '\n':
+            self.NewLine = True
 
+        self.get_next_char()
+        self.update_token(True)
+        self.token_list.append(self.token)
+        self.new_token()
     
     def new_token(self):
         self.token = Token()
         self.token.type = None
         self.token.content = ''
+        if self.NewLine:
+            self.cur_line += 1
+            self.cur_col = 0
+            self.NewLine = False
         self.token.s_line = self.cur_line
         self.token.s_col = self.cur_col
         self.token.start_pos = str(self.token.s_line)+'.'+str(self.token.s_col)
         print "New token start at: %s" %(self.token.start_pos)
 
     def update(self, string):
-        # parse a new token
+        # prepare for the first token
         self.cur_line = 1
         self.cur_col = 0
         self.string = string
         self.token_list = []
-        self.new_token()
         self.cur_idx = 0
         self.cur_ch = self.string[0]
+        self.NewLine = False
+        # alloc the first token
+        self.new_token()
 
         while self.cur_ch != None:
             if self.cur_ch == ' ':
                 self.skip_whitespace()
             elif self.cur_ch.isalpha():
                 self.eatID()
+            #elif cur_cur == '\n':
             else:
                 print "Unknown type"
+                self.eatChar()
         print "Updated"
         
 lexer = Lexer()
