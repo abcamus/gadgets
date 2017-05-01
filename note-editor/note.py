@@ -19,7 +19,7 @@ class Note():
         self.tk = Tk()
         self.tk.title('宙斯的神殿')
         self.tk.after(500, self.updateTime)
-        self.cur_idx = 1.0
+        self.cur_idx = 1
         self.cur_pos = '1.0'
         #self.tk.iconbitmap('icons/48x48.ico')
     
@@ -38,9 +38,9 @@ class Note():
         if text.edit_modified():
             #print text.index(END)
             text.edit_modified(False)
-            string = text.get(main.cur_pos, INSERT)
+            string = text.get('1.0', INSERT)
             parser.parse(main, string)
-            main.update_line_col()
+            #main.update_line_col()
         self.tk.after(100, self.updateTime)
             
     def createUI(self):

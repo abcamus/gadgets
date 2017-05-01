@@ -12,19 +12,20 @@ class MainUI(Frame):
     def __init__(self, parent):
         Frame.__init__(self, parent)
         self.sysstr = platform.system()
-        self.menubar = Menu(parent)
         self.attribute = {'font':('Monaco', 13), 'bg':"#1B1D1E", 'fg':"#F8F8F2", 'sl':False}
         if self.sysstr == "Linux":
             print "Linux System"
             self.attribute['font'] = ('Monaco', 13)
+            self.attribute['menufont'] = ('Monaco', 10)
         elif self.sysstr == "Windows":
             self.attribute['font'] = ('Simsun', 13)
         else:
             self.attribute['font'] = ('Monaco', 13)
+        self.menubar = Menu(parent, bg='#f0f0fa', font=self.attribute['menufont'])
         self.fname = 'default.txt'
 
         # create file menu
-        self.fmenu = Menu(self.menubar, tearoff = 0)
+        self.fmenu = Menu(self.menubar, tearoff = 0, bg='#f0f0fa', font=self.attribute['menufont'])
         self.fmenu.add_command(label = 'Open', command = self.open)
 
         #fmenu.add_separator()
@@ -33,36 +34,27 @@ class MainUI(Frame):
         self.menubar.add_cascade(label = "File", menu = self.fmenu)
         
         # create edit menu
-        editmenu = Menu(self.menubar, tearoff = 0)
+        editmenu = Menu(self.menubar, tearoff = 0, bg='#f0f0fa', font=self.attribute['menufont'])
         editmenu.add_command(label = 'line number', command = self.ShowLineNum)
         self.menubar.add_cascade(label = 'Edit', menu = editmenu)
 
         # create help menu
-        helpmenu = Menu(self.menubar, tearoff = 0)
+        helpmenu = Menu(self.menubar, tearoff = 0, bg='#f0f0fa', font=self.attribute['menufont'])
         helpmenu.add_command(label = 'About The Author', command = self.aboutAuthor)
         self.menubar.add_cascade(label = 'Help', menu = helpmenu)
         parent['menu'] = self.menubar
         
         # Text config
-        self.text = Text(font = self.attribute['font'], bg=self.attribute['bg'], fg=self.attribute['fg'], insertwidth=1, insertbackground="#f0f0f0", tabs='1c')
-        self.linbar = Label(font = self.attribute['font'], width=4)
+        self.text = Text(parent, font = self.attribute['font'], bg=self.attribute['bg'], fg=self.attribute['fg'], insertwidth=1, insertbackground="#f0f0f0", tabs='1c')
+        self.linbar = Label(parent, width=3, font = self.attribute['font'], bg='#0a0a00', fg='#f0f0ff', anchor=NE)
+        self.linbar.pack(side=LEFT, fill=Y)
         self.text.pack(side=LEFT, fill=BOTH, expand=YES)
         theme.init(self.text)
-        self.line = 1
-        self.column = 0
 
         # bind keys
         self.text.bind("<Control-a>", self.sel_all)
         self.text.bind("<Control-s>", self.save)
         self.filecontent = None
-
-        # keep current position in text
-        self.line = 1
-        self.col = 0
-        self.cur_pos = '1.0'
-
-    def update_line_col(self):
-        self.cur_pos = str(self.line)+'.'+str(self.col)
 
     '''
     binding functions
@@ -88,18 +80,12 @@ class MainUI(Frame):
         self.filecontent = self.text.get(1.0, END).split('\n')
         for line in self.filecontent:
             if self.attribute['sl'] is False:
-                self.linbar.pack(side = LEFT, fill = Y, expand = YES)
-                '''
-                self.strNum = str(int(self.linenum))
-                for i in range(4-len(str(int(self.linenum)))):
-                    self.strNum = '0'+self.strNum 
-                self.text.insert(self.linenum, self.strNum, 'bg')
-                self.text.insert(INSERT, '  '+line+'\n')
-                '''
-                self.linbar["text"] += str(int(self.linenum))+'\n'
+                self.text.forget()
+                self.linbar.pack(side=LEFT, fill=Y)
+                self.text.pack(side=LEFT, fill=BOTH, expand=YES)
+                self.linbar['text'] = '1\n'
             else:
                 self.linbar.forget()
-                self.text.insert(self.linenum, line)
             self.linenum += 1
         self.attribute['sl'] = not self.attribute['sl']
     
