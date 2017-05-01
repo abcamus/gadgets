@@ -21,11 +21,13 @@ int normal_year[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 struct Cal_t *calendar;
 
-int add_days(int month_day[], int month)
+int add_days(int month_day[], struct tm *p)
 {
     int sum_days = 0, idx;
-    for (idx = 0; idx < month; idx += 1)
+    for (idx = 0; idx < p->tm_mon; idx += 1) {
         sum_days += month_day[idx];
+	}
+	sum_days += p->tm_mday;
 
     return sum_days;
 }
@@ -46,11 +48,12 @@ void genCalendar(struct tm *p)
         int year = 1900 + p->tm_year+idx;
 		calendar[idx].cur_year = year;
         if (0 == idx) {
+			printf("month = %d, day = %d\n", p->tm_mon, p->tm_mday);
             calendar[idx].month_cnt = 12-p->tm_mon;
             if (0 == year%4)
-                calendar[idx].day_cnt = 366-add_days(leap_year, 1+p->tm_mon);
+                calendar[idx].day_cnt = 366-add_days(leap_year, p);
             else
-                calendar[idx].day_cnt = 365-add_days(normal_year, 1+p->tm_mon);
+                calendar[idx].day_cnt = 365-add_days(normal_year, p);
             calendar[idx].day_cnt -= p->tm_mday;
             calendar[idx].month_cnt = 12-(1+p->tm_mon);
         }
