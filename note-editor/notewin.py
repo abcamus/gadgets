@@ -1,3 +1,5 @@
+#--coding:utf-8 --
+
 from Tkinter import *
 import tkFileDialog 
 import os
@@ -37,6 +39,12 @@ class MainUI(Frame):
         editmenu = Menu(self.menubar, tearoff = 0, bg='#f0f0fa', font=self.attribute['menufont'])
         editmenu.add_command(label = 'line number', command = self.ShowLineNum)
         self.menubar.add_cascade(label = 'Edit', menu = editmenu)
+        
+        # mode
+        modemenu = Menu(self.menubar, tearoff = 0, bg='#f0f0fa', font=self.attribute['menufont'])
+        modemenu.add_command(label = 'Chinese', command = self.modeCHN)
+        modemenu.add_command(label = 'English', command = self.modeENG)
+        self.menubar.add_cascade(label='Mode', menu=modemenu)
 
         # create help menu
         helpmenu = Menu(self.menubar, tearoff = 0, bg='#f0f0fa', font=self.attribute['menufont'])
@@ -45,16 +53,29 @@ class MainUI(Frame):
         parent['menu'] = self.menubar
         
         # Text config
+        #from ScrolledText import ScrolledText
         self.text = Text(parent, font = self.attribute['font'], bg=self.attribute['bg'], fg=self.attribute['fg'], insertwidth=1, insertbackground="#f0f0f0", tabs='1c')
-        self.linbar = Label(parent, width=3, font = self.attribute['font'], bg='#0a0a00', fg='#f0f0ff', anchor=NE)
+        self.linbar = Label(parent, width=3, font = self.text['font'], bg='#0a0a00', fg='#f0f0ff', anchor=NE)
         self.linbar.pack(side=LEFT, fill=Y)
         self.text.pack(side=LEFT, fill=BOTH, expand=YES)
+        self.TotalTextLine = 1
+        self.TotalWinLine = self.text.winfo_height()
         theme.init(self.text)
 
         # bind keys
         self.text.bind("<Control-a>", self.sel_all)
         self.text.bind("<Control-s>", self.save)
         self.filecontent = None
+
+    def modeCHN(self):
+        self.mode = "Chinese"
+        self.text['font'] = 'YHHT'
+        self.linbar['font'] = 'YHHT'
+
+    def modeENG(self):
+        self.mode = "English"
+        self.text['font'] = 'Monaco'
+        self.linbar['font'] = 'Monaco'
 
     '''
     binding functions
@@ -123,7 +144,7 @@ class MainUI(Frame):
             return -1
 
         myFile = open(self.fname,'w')
-        myFile.write(content.encode('gb2312'))
+        myFile.write(content.encode('utf-8'))
         myFile.flush()
         myFile.close()
         return 0
@@ -144,9 +165,9 @@ class MainUI(Frame):
         author_ui = Toplevel()
         author_ui.title('About')
         #author_ui.iconbitmap('icons/48x48.ico')
-        author_ui.geometry('200x80')
-        about_string = Label(author_ui, text = 'Author: Albert Camus')
-        confirmButton = Button(author_ui, text = 'Confirm',
+        #author_ui.geometry('200x80')
+        about_string = Label(author_ui, text = 'Author: Albert Camus', font='Monaco')
+        confirmButton = Button(author_ui, text = 'Confirm', font='Monaco',
                                command = lambda: self.destroy_ui(author_ui))
         about_string.pack()
         confirmButton.pack()

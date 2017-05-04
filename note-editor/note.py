@@ -1,13 +1,11 @@
 #--coding:utf-8 --
 
-
 __version__ = 0.1
 __author__ = {'name' : 'Albert Camus',
               'Email' : 'abcamus_dev@163.com',
               'Blog' : '',
               'QQ' : '',
               'Created' : ''}
-
 
 from json.decoder import errmsg
 import sys, tkFileDialog, os
@@ -35,6 +33,13 @@ class Note():
         import parser
         main = self.MainText
         text = main.text
+        cur_lineNum = len(text.get('1.0', END).split('\n'))
+        if cur_lineNum != main.TotalTextLine:
+            main.TotalTextLine = len(text.get('1.0', END).split('\n'))
+            print "Total Line = %d" %(main.TotalTextLine)
+            main.linbar['text'] = ''
+            for i in range(main.TotalTextLine):
+                main.linbar['text'] += str(i+1)+'\n'
         if text.edit_modified():
             #print text.index(END)
             text.edit_modified(False)
