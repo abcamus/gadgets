@@ -15,7 +15,7 @@ class MainUI(Frame):
         self.attribute = {'font':('Monaco', 13), 'bg':"#1B1D1E", 'fg':"#F8F8F2", 'sl':False}
         if self.sysstr == "Linux":
             print "Linux System"
-            self.attribute['font'] = ('Monaco', 13)
+            self.attribute['font'] = ('YHHT', 13)
             self.attribute['menufont'] = ('Monaco', 10)
         elif self.sysstr == "Windows":
             self.attribute['font'] = ('Simsun', 13)

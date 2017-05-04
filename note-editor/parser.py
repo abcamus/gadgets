@@ -126,9 +126,9 @@ lexer = Lexer()
 from Tkinter import *
 def parse(main, string):
     text = main.text
-    print str(string)
+    print string
     if len(string) > 0:
-        lexer.update(str(string))
+        lexer.update(string)
     for token in lexer.token_list:
         #text.tag_add(token.type, token.start_pos, token.end_pos)
         print "Token: %s(%s-%s)" %(token.content, token.start_pos, token.end_pos)
