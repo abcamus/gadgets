@@ -96,7 +96,7 @@ class Lexer():
         self.token.s_line = self.cur_line
         self.token.s_col = self.cur_col
         self.token.start_pos = str(self.token.s_line)+'.'+str(self.token.s_col)
-        print "New token start at: %s" %(self.token.start_pos)
+        #print "New token start at: %s" %(self.token.start_pos)
 
     def update(self, string):
         # prepare for the first token
@@ -117,7 +117,7 @@ class Lexer():
                 self.eatID()
             #elif cur_cur == '\n':
             else:
-                print "Unknown type"
+                #print "Unknown type"
                 self.eatChar()
         print "Updated"
         
@@ -126,9 +126,9 @@ lexer = Lexer()
 from Tkinter import *
 def parse(main, string):
     text = main.text
-    print string
+    #print string
     if len(string) > 0:
         lexer.update(string)
-    for token in lexer.token_list:
+    #for token in lexer.token_list:
         #text.tag_add(token.type, token.start_pos, token.end_pos)
-        print "Token: %s(%s-%s)" %(token.content, token.start_pos, token.end_pos)
+        #print "Token: %s(%s-%s)" %(token.content, token.start_pos, token.end_pos)

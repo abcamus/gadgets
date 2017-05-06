@@ -17,7 +17,7 @@ class MainUI(Frame):
         self.attribute = {'font':('Monaco', 13), 'bg':"#1B1D1E", 'fg':"#F8F8F2", 'sl':False}
         if self.sysstr == "Linux":
             print "Linux System"
-            self.attribute['font'] = ('YHHT', 13)
+            self.attribute['font'] = ('Monaco', 13)
             self.attribute['menufont'] = ('Monaco', 10)
         elif self.sysstr == "Windows":
             self.attribute['font'] = ('Simsun', 13)
@@ -54,11 +54,17 @@ class MainUI(Frame):
         
         # Text config
         #from ScrolledText import ScrolledText
-        self.text = Text(parent, font = self.attribute['font'], bg=self.attribute['bg'], fg=self.attribute['fg'], insertwidth=1, insertbackground="#f0f0f0", tabs='1c')
-        self.linbar = Label(parent, width=3, font = self.text['font'], bg='#0a0a00', fg='#f0f0ff', anchor=NE)
+        self.text = Text(parent.Frame, font = self.attribute['font'], bg=self.attribute['bg'], fg=self.attribute['fg'], insertwidth=1, insertbackground="#f0f0f0", tabs='1c')
+        self.linbar = Label(parent.Frame, width=3, font = self.text['font'], bg='#0a0a00', fg='#f0f0ff', anchor=NE)
+        self.scrollbar = Scrollbar(parent.Frame)
+
+        self.text['yscrollcommand'] = self.scrollbar.set
+        self.scrollbar['command'] = self.text.yview
+
         self.linbar.pack(side=LEFT, fill=Y)
         self.text.pack(side=LEFT, fill=BOTH, expand=YES)
-        self.TotalTextLine = 1
+        self.scrollbar.pack(side=LEFT, fill=Y)
+        self.TotalTextLine = 0
         self.TotalWinLine = self.text.winfo_height()
         theme.init(self.text)
 

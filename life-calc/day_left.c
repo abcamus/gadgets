@@ -54,7 +54,6 @@ void genCalendar(struct tm *p)
                 calendar[idx].day_cnt = 366-add_days(leap_year, p);
             else
                 calendar[idx].day_cnt = 365-add_days(normal_year, p);
-            calendar[idx].day_cnt -= p->tm_mday;
             calendar[idx].month_cnt = 12-(1+p->tm_mon);
         }
         else {

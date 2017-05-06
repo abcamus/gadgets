@@ -33,13 +33,15 @@ class Note():
         import parser
         main = self.MainText
         text = main.text
-        cur_lineNum = len(text.get('1.0', END).split('\n'))
-        if cur_lineNum != main.TotalTextLine:
-            main.TotalTextLine = len(text.get('1.0', END).split('\n'))
-            print "Total Line = %d" %(main.TotalTextLine)
-            main.linbar['text'] = ''
-            for i in range(main.TotalTextLine):
-                main.linbar['text'] += str(i+1)+'\n'
+        cur_lineNum = len(text.get('1.0', END).split('\n'))-1
+        StartLine = int(cur_lineNum*text.yview()[0])
+        EndLine = int(cur_lineNum*text.yview()[1])
+        #print text.yview()
+        #print main.scrollbar.get()
+        #print "Total Line = %d" %(main.TotalTextLine)
+        main.linbar['text'] = ''
+        for i in range(StartLine, EndLine):
+            main.linbar['text'] += str(i+1)+'\n'
         if text.edit_modified():
             #print text.index(END)
             text.edit_modified(False)
@@ -50,6 +52,9 @@ class Note():
             
     def createUI(self):
         #create main menu
+        self.tk.Frame = Frame(height=720, width=1280)
+        self.tk.Frame.pack()
+        self.tk.Frame.pack_propagate(0)
         self.MainText = MainUI(self.tk)
 
 if __name__ == '__main__':  
