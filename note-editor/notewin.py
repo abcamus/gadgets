@@ -15,19 +15,28 @@ class MainUI(Frame):
         Frame.__init__(self, parent)
         self.sysstr = platform.system()
         self.attribute = {'font':('Monaco', 13), 'bg':"#1B1D1E", 'fg':"#F8F8F2", 'sl':False}
+        print self.sysstr
         if self.sysstr == "Linux":
-            print "Linux System"
             self.attribute['font'] = ('Monaco', 13)
-            self.attribute['menufont'] = ('Monaco', 10)
+            self.attribute['menufont'] = ('Monaco', 12)
+            self.attribute['chn'] = ('YHHT', 14)
         elif self.sysstr == "Windows":
             self.attribute['font'] = ('Simsun', 13)
+            self.attribute['chn'] = ('Simsun', 13)
+        elif self.sysstr == "Darwin":
+            self.attribute['font'] = ('Monaco', 17)
+            self.attribute['menufont'] = ('Monaco', 12)
+            self.attribute['chn'] = ('STFangsong', 19)
         else:
             self.attribute['font'] = ('Monaco', 13)
+            self.attribute['menufont'] = ('Monaco', 12)
+            self.attribute['chn'] = ('Simsun', 14)
+
         self.menubar = Menu(parent, bg='#f0f0fa', font=self.attribute['menufont'])
         self.fname = 'default.txt'
 
         # create file menu
-        self.fmenu = Menu(self.menubar, tearoff = 0, bg='#f0f0fa', font=self.attribute['menufont'])
+        self.fmenu = Menu(self.menubar, tearoff = 0, font=self.attribute['menufont'])
         self.fmenu.add_command(label = 'Open', command = self.open)
 
         #fmenu.add_separator()
@@ -36,18 +45,13 @@ class MainUI(Frame):
         self.menubar.add_cascade(label = "File", menu = self.fmenu)
         
         # create edit menu
-        editmenu = Menu(self.menubar, tearoff = 0, bg='#f0f0fa', font=self.attribute['menufont'])
-        editmenu.add_command(label = 'line number', command = self.ShowLineNum)
+        editmenu = Menu(self.menubar, tearoff = 0, font=self.attribute['menufont'])
+        editmenu.add_command(label = 'Chinese', command = self.modeCHN)
+        editmenu.add_command(label = 'English', command = self.modeENG)
         self.menubar.add_cascade(label = 'Edit', menu = editmenu)
         
-        # mode
-        modemenu = Menu(self.menubar, tearoff = 0, bg='#f0f0fa', font=self.attribute['menufont'])
-        modemenu.add_command(label = 'Chinese', command = self.modeCHN)
-        modemenu.add_command(label = 'English', command = self.modeENG)
-        self.menubar.add_cascade(label='Mode', menu=modemenu)
-
         # create help menu
-        helpmenu = Menu(self.menubar, tearoff = 0, bg='#f0f0fa', font=self.attribute['menufont'])
+        helpmenu = Menu(self.menubar, tearoff = 0, font=self.attribute['menufont'])
         helpmenu.add_command(label = 'About The Author', command = self.aboutAuthor)
         self.menubar.add_cascade(label = 'Help', menu = helpmenu)
         parent['menu'] = self.menubar
@@ -55,7 +59,8 @@ class MainUI(Frame):
         # Text config
         #from ScrolledText import ScrolledText
         self.text = Text(parent.Frame, font = self.attribute['font'], bg=self.attribute['bg'], fg=self.attribute['fg'], insertwidth=1, insertbackground="#f0f0f0", tabs='1c')
-        self.linbar = Label(parent.Frame, width=3, font = self.text['font'], bg='#0a0a00', fg='#f0f0ff', anchor=NE)
+        self.text.configure(highlightthickness = 0)
+        self.linbar = Label(parent.Frame, width=3, padx = 5, font = self.text['font'], bg='#0a0a00', fg='#f0f0ff', anchor=NE)
         self.scrollbar = Scrollbar(parent.Frame)
 
         self.text['yscrollcommand'] = self.scrollbar.set
@@ -75,13 +80,13 @@ class MainUI(Frame):
 
     def modeCHN(self):
         self.mode = "Chinese"
-        self.text['font'] = 'YHHT'
-        self.linbar['font'] = 'YHHT'
+        self.text['font'] = self.attribute['chn']
+        self.linbar['font'] = self.attribute['chn']
 
     def modeENG(self):
         self.mode = "English"
-        self.text['font'] = 'Monaco'
-        self.linbar['font'] = 'Monaco'
+        self.text['font'] = self.attribute['font']
+        self.linbar['font'] = self.attribute['font']
 
     '''
     binding functions
