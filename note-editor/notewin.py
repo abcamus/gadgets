@@ -19,7 +19,7 @@ class MainUI(Frame):
         if self.sysstr == "Linux":
             self.attribute['font'] = ('Monaco', 13)
             self.attribute['menufont'] = ('Monaco', 12)
-            self.attribute['chn'] = ('YHHT', 14)
+            self.attribute['chn'] = ('YHHT', 13)
         elif self.sysstr == "Windows":
             self.attribute['font'] = ('Simsun', 13)
             self.attribute['chn'] = ('Simsun', 13)
@@ -57,8 +57,7 @@ class MainUI(Frame):
         parent['menu'] = self.menubar
         
         # Text config
-        #from ScrolledText import ScrolledText
-        self.text = Text(parent.Frame, font = self.attribute['font'], bg=self.attribute['bg'], fg=self.attribute['fg'], insertwidth=1, insertbackground="#f0f0f0", tabs='1c', relief=FLAT, bd=0)
+        self.text = Text(parent.Frame, font = self.attribute['font'], bg=self.attribute['bg'], fg=self.attribute['fg'], insertwidth=1, insertbackground="#f0f0f0", tabs='1c', relief=FLAT, bd=0, pady=5, padx=5)
         self.text.configure(highlightthickness = 0)
         self.linbar = Label(parent.Frame, width=3, padx = 5, font = self.text['font'], bg='#0a0a00', fg='#f0f0ff', anchor=NE)
         self.scrollbar = Scrollbar(parent.Frame)
