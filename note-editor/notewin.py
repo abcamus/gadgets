@@ -57,9 +57,10 @@ class MainUI(Frame):
         parent['menu'] = self.menubar
         
         # Text config
-        self.text = Text(parent.Frame, font = self.attribute['font'], bg=self.attribute['bg'], fg=self.attribute['fg'], insertwidth=1, insertbackground="#f0f0f0", tabs='1c', relief=FLAT, bd=0, pady=5, padx=5)
+        self.text = Text(parent.Frame, font = self.attribute['font'], bg=self.attribute['bg'], fg=self.attribute['fg'], insertwidth=1, insertbackground="#f0f0f0", relief=FLAT, bd=0, pady=5, padx=5)
+        self.text['tabs'] = '0.55i'
         self.text.configure(highlightthickness = 0)
-        self.linbar = Label(parent.Frame, width=3, padx = 5, font = self.text['font'], bg='#0a0a00', fg='#f0f0ff', anchor=NE)
+        self.linbar = Label(parent.Frame, width=3, pady = 5, padx = 5, font = self.text['font'], bg='#0a0a00', fg='#f0f0ff', anchor=NE)
         self.scrollbar = Scrollbar(parent.Frame)
 
         self.text['yscrollcommand'] = self.scrollbar.set
